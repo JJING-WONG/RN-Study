@@ -1,72 +1,91 @@
-import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { usePathname, useRouter } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BlurView } from "expo-blur";
-
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  useColorScheme,
+  ScrollView,
+} from "react-native";
+import { useRouter } from "expo-router";
+import Post from "@/components/Post";
 export default function Index() {
   const router = useRouter();
-  const pathname = usePathname();
-  const insets = useSafeAreaInsets();
-  const isLoggedIn = false;
+  const colorScheme = useColorScheme();
 
   return (
-    <View
+    <ScrollView
+      nestedScrollEnabled
       style={[
         styles.container,
-        { paddingTop: insets.top, paddingBottom: insets.bottom },
+        colorScheme === "dark" ? styles.containerDark : styles.containerLight,
       ]}
     >
-      <BlurView style={styles.header} intensity={70}>
-        <Image
-          source={require("../../../assets/images/react-logo.png")}
-          style={styles.headerLogo}
-        />
-        {!isLoggedIn && (
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => {
-              console.log("loginButton onPress");
-              router.navigate(`/login`);
-            }}
-          >
-            <Text style={styles.loginButtonText}>로그인</Text>
-          </TouchableOpacity>
-        )}
-      </BlurView>
-      {isLoggedIn && (
-        <View style={styles.tabContainer}>
-          <View style={styles.tab}>
-            <TouchableOpacity onPress={() => router.navigate(`/`)}>
-              <Text style={{ color: pathname === "/" ? "red" : "black" }}>
-                For you
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.tab}>
-            <TouchableOpacity onPress={() => router.navigate(`/following`)}>
-              <Text style={{ color: pathname === "/" ? "black" : "red" }}>
-                Following
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-      <View>
-        <TouchableOpacity onPress={() => router.push(`/@zerocho/post/1`)}>
-          <Text>게시글1</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity onPress={() => router.push(`/@zerocho/post/2`)}>
-          <Text>게시글2</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity onPress={() => router.push(`/@zerocho/post/3`)}>
-          <Text>게시글3</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      <Post
+        item={{
+          id: "0",
+          username: "madison",
+          displayName: "Madison",
+          content: "What is this?",
+          timeAgo: "30 minutes ago",
+          likes: 10,
+          comments: 5,
+          reposts: 2,
+          isVerified: true,
+          avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+          images: [`https://picsum.photos/800/600?random=${Math.random()}`],
+          location: [37.125, 124.97],
+        }}
+      />
+      <Post
+        item={{
+          id: "1",
+          username: "zerocho",
+          displayName: "Zerocho",
+          content: "My website is ZeroCho.com",
+          timeAgo: "1 hour ago",
+          likes: 10,
+          comments: 5,
+          reposts: 2,
+          link: "https://www.zerocho.com",
+          linkThumbnail: "https://www.zerocho.com/favicon.png",
+          isVerified: true,
+          avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+        }}
+      />
+      <Post
+        item={{
+          id: "2",
+          username: "zerocho",
+          displayName: "Zerocho",
+          content: "Hello, world!",
+          timeAgo: "1 hour ago",
+          likes: 10,
+          comments: 5,
+          reposts: 2,
+          isVerified: true,
+          avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+        }}
+      />
+      <Post
+        item={{
+          id: "3",
+          username: "karina",
+          displayName: "Karina",
+          content: "Hello, world!",
+          timeAgo: "1 hour ago",
+          likes: 10,
+          comments: 5,
+          reposts: 2,
+          isVerified: true,
+          avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+          images: [
+            `https://picsum.photos/800/600?random=${Math.random()}`,
+            `https://picsum.photos/800/600?random=${Math.random()}`,
+          ],
+          location: [37.125, 124.97],
+        }}
+      />
+    </ScrollView>
   );
 }
 
@@ -74,32 +93,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  tabContainer: {
-    flexDirection: "row",
+  containerLight: {
+    backgroundColor: "white",
   },
-  tab: {
-    flex: 1,
-    alignItems: "center",
+  containerDark: {
+    backgroundColor: "#101010",
   },
-  header: {
-    alignItems: "center",
+  textLight: {
+    color: "black",
   },
-  headerLogo: {
-    width: 42, // DP, DIP
-    height: 42,
-  },
-  loginButton: {
-    position: "absolute",
-    right: 20,
-    top: 0,
-    backgroundColor: "black",
-    borderWidth: 1,
-    borderColor: "black",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  loginButtonText: {
+  textDark: {
     color: "white",
   },
 });
